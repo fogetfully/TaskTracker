@@ -5,11 +5,12 @@ import type { Theme } from "../App";
 type TaskListProps = {
     tasks: Task[];
     handleRemoveTask: (id: string) => void;
+    handleChangeTask: (id: string) => void;
     theme: Theme;
 }
 
 
-export default function TaskList({tasks, handleRemoveTask , theme}: TaskListProps) {
+export default function TaskList({tasks, handleRemoveTask, handleChangeTask, theme}: TaskListProps) {
 
     return (
         <div className="task_list">
@@ -20,6 +21,7 @@ export default function TaskList({tasks, handleRemoveTask , theme}: TaskListProp
                     title={task.title}
                     done={task.done}
                     handleRemoveTasks={handleRemoveTask}
+                    handleChangeTask={handleChangeTask}
                     theme={theme}
                 // count={defacultTasks.length} 
                 />

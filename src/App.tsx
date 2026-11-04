@@ -41,15 +41,23 @@ export default function App() {
     const filered = tasks.filter((task) => task.id !== id)
     setTasks(filered)
   }
+  const handleChangeTask = (id:string) => {
+    setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id ? { ...task, done: !task.done } : task
+        )
+      );
+  }
 
   return (
     <div className="main">
       <Header theme={theme} ToggleTheme={handleToggleTheme} />
       <AddForm addNewTask={addNewTask} theme={theme} />
-      <TaskList tasks={tasks}
+      <TaskList 
+        tasks={tasks}
         handleRemoveTask={handleRemoveTask}
+        handleChangeTask={handleChangeTask} 
         theme={theme} />
-
     </div>
   )
 }
