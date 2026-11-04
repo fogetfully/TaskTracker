@@ -7,9 +7,13 @@ type HeaderProps = {
 
 export default function Header({ theme, ToggleTheme }: HeaderProps) {
     return (
-        <header className="header">
+        <header className={`header theme-${theme}`}>
             <h2>Task Tracker</h2>
-            <button onClick={ToggleTheme}>Текущая тема: {theme}</button>
+            <button
+                className={`theme-${theme}`}
+                onClick={ToggleTheme}>
+                Текущая тема: {theme}
+            </button>
             {/* <label>
                 <input
                     type="checkbox"

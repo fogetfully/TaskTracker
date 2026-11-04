@@ -18,13 +18,17 @@ export default function TaskItem({ id, title, done, handleRemoveTasks, handleCha
   }
 
   return (
-    <div className="task_item"
-      style={{ borderColor: (done ? 'green' : 'red') }}
+    <div className={`task-item theme-${theme}`}
+      // style={{ borderColor: (done ? 'green' : 'red') }}
       onClick={() => handleChangeTask(id)}>
 
-      <h2>{title}</h2>
+      <h2 className="task-title">{title}</h2>
       <p>{done ? 'Выполнена' : 'Не выполнена'}</p>
-      <button onClick={handleRemove}>x</button>
+      <button
+        className={`theme-${theme}`}
+        onClick={handleRemove} >
+        x
+      </button>
     </div>
   )
 }

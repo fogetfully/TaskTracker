@@ -13,7 +13,7 @@ type TaskListProps = {
 export default function TaskList({tasks, handleRemoveTask, handleChangeTask, theme}: TaskListProps) {
 
     return (
-        <div className="task_list">
+        <div className={`task-list theme-${theme}`}>
             {tasks.map((task) => (
                 <TaskItem
                     key={task.id}

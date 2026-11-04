@@ -50,7 +50,7 @@ export default function App() {
   }
 
   return (
-    <div className="main">
+    <div className={`main theme-${theme}`}>
       <Header theme={theme} ToggleTheme={handleToggleTheme} />
       <AddForm addNewTask={addNewTask} theme={theme} />
       <TaskList 
