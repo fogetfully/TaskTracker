@@ -28,7 +28,7 @@ export default function App() {
 
   const addNewTask = (title: string) => {
     const newTask = {
-      id: crypto.randomUUID(),
+      id: String(Date.now()),
       title,
       done: false,
     }
@@ -78,7 +78,6 @@ export default function App() {
         <div className={`main theme-${theme}`}>
           <Header />
           <AddForm addNewTask={addNewTask} />
-          <TaskList tasks={tasks} />
           {status === "success" &&
             <TaskList tasks={tasks} />
           }
