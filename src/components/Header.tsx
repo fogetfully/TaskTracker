@@ -1,27 +1,21 @@
-import type { Theme } from "../App";
+import { useContext } from "react"
+import { ThemeContext } from "../context/ThemeContext"
 
-type HeaderProps = {
-    theme: Theme;
-    ToggleTheme: () => void;
-}
+export default function Header() {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error("Header must be rendered inside ThemeContext.Provider");
+    }
 
-export default function Header({ theme, ToggleTheme }: HeaderProps) {
     return (
-        <header className={`header theme-${theme}`}>
+        <header className={`header theme-${context.theme}`}>
             <h2>Task Tracker</h2>
             <button
-                className={`theme-${theme}`}
-                onClick={ToggleTheme}>
-                Текущая тема: {theme}
+                className={`theme-${context.theme}`}
+                onClick={context.toggleTheme}
+            >
+                Включить {context.theme === "light" ? "темную" : "светлую"} тему
             </button>
-            {/* <label>
-                <input
-                    type="checkbox"
-                    role="switch"
-                    onChange={ToggleTheme }
-                />
-                Темная тема
-            </label> */}
         </header>
     )
 }

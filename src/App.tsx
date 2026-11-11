@@ -2,16 +2,16 @@ import TaskList from "./components/TaskList";
 import Header from "./components/Header";
 import AddForm from "./components/AddForm";
 
-import { useState } from "react";
+import { fetchTodos } from "./api/task.api";
+import { TaskContext } from "./context/TaskContext";
+import { ThemeContext, type Theme } from "./context/ThemeContext";
+import { useEffect, useState } from "react";
 
 export type Task = {
   id: string;
   title: string;
   done: boolean;
 }
-export type Theme = "light" | "dark";
-
-
 
 export default function App() {
 
@@ -24,6 +24,7 @@ export default function App() {
 
   const [tasks, setTasks] = useState(defacultTasks)
   const [theme, setTheme] = useState<Theme>("light")
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const addNewTask = (title: string) => {
     const newTask = {
@@ -33,31 +34,59 @@ export default function App() {
     }
     setTasks([...tasks, newTask])
   }
-  const handleToggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light")
-  }
+
 
   const handleRemoveTask = (id: string) => {
     const filered = tasks.filter((task) => task.id !== id)
     setTasks(filered)
   }
-  const handleChangeTask = (id:string) => {
+
+  const handleChangeTask = (id: string) => {
     setTasks((prev) =>
-        prev.map((task) =>
-          task.id === id ? { ...task, done: !task.done } : task
-        )
-      );
+      prev.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    );
   }
 
+  const toggleTheme = () => {
+    setTheme((currentTheme) => currentTheme === "light" ? "dark" : "light")
+  }
+
+  async function load() {
+    setStatus('loading');
+    try {
+      const items = await fetchTodos();
+      setTasks(items.map(({ id, title, completed }) => ({
+        id: String(id),
+        title,
+        done: completed,
+      })));
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
   return (
-    <div className={`main theme-${theme}`}>
-      <Header theme={theme} ToggleTheme={handleToggleTheme} />
-      <AddForm addNewTask={addNewTask} theme={theme} />
-      <TaskList 
-        tasks={tasks}
-        handleRemoveTask={handleRemoveTask}
-        handleChangeTask={handleChangeTask} 
-        theme={theme} />
-    </div>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <TaskContext.Provider value={{ handleChangeTask, handleRemoveTask }}>
+        <div className={`main theme-${theme}`}>
+          <Header />
+          <AddForm addNewTask={addNewTask} />
+          <TaskList tasks={tasks} />
+          {status === "success" &&
+            <TaskList tasks={tasks} />
+          }
+          {status === "loading" &&
+            <h2>...</h2>
+          }
+        </div>
+      </TaskContext.Provider>
+    </ThemeContext.Provider>
   )
 }
